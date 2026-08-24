@@ -6,6 +6,37 @@ Tài liệu: [`../docs/plan/agent-box-plan.md`](../docs/plan/agent-box-plan.md),
 
 Quyết định đã chốt ở mục 12.1: **giao diện web, không làm CLI.**
 
+## Cài đặt & chạy local
+
+Yêu cầu: **Node.js ≥ 18**.
+
+```bash
+# 1. Clone repo
+git clone https://github.com/khaikhaichimtoonly-star/Cloud-Anget-P.git
+cd Cloud-Anget-P/frontend
+
+# 2. Cài dependencies
+npm install
+
+# 3. Chạy dev server
+npm run dev
+```
+
+Mở trình duyệt tại **http://localhost:3100**.
+
+**Không cần backend.** Frontend hiện chạy độc lập — dùng mock transport (`src/lib/transport/mock/`) mô phỏng một phiên agent đầy đủ 8 bước kịch bản bảo mật (mục 9.5.2 của kế hoạch). Bấm nút "Bước tiếp" ở góc trên bên phải để đi qua từng bước.
+
+### Các lệnh khác
+
+| Lệnh | Làm gì |
+|---|---|
+| `npm run dev` | Dev server tại `localhost:3100` |
+| `npm run build` | Build production ra `dist/` |
+| `npm run preview` | Xem bản production build |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | TypeScript check không emit |
+| `npm run test` | Vitest (hiện 14 test) |
+
 ## Năm khung — `src/panels/`
 
 Bảng 12.2 của kế hoạch. Khung ⑤ là khung mà Devin và OpenHands đều không có.
