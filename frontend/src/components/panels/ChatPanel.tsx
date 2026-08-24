@@ -7,6 +7,8 @@ import { useT } from '../../i18n/context'
 import type { ChatMessage } from '../../types/ui'
 import { LabelDot } from '../LabelDot'
 import { PlainText, Chip } from '../ui'
+import { motion, AnimatePresence } from 'motion/react'
+import { Bot, Brain } from 'lucide-react'
 
 export function ChatPanel() {
   const t = useT()
@@ -32,23 +34,31 @@ export function ChatPanel() {
 
   return (
     <div className="flex flex-col gap-1 p-3">
-      {messages.map((message, idx) => (
-        <MessageRow
-          key={message.id}
-          message={message}
-          hasPendingPermission={pendingRequestIds.includes(
-            message.kind === 'permission_request' ? message.request_id : '',
-          )}
-          hasModeSwitch={proposal !== null && message.kind === 'mode_switch'}
-          onOpenPermission={() => openTab('labels')}
-          onOpenModeSwitch={() => openTab('plan')}
-          showDivider={
-            idx > 0 &&
-            messages[idx - 1].kind !== 'agent_step' &&
-            message.kind === 'agent_step'
-          }
-        />
-      ))}
+      <AnimatePresence>
+        {messages.map((message, idx) => (
+          <motion.div
+            key={message.id}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.15 }}
+          >
+            <MessageRow
+              message={message}
+              hasPendingPermission={pendingRequestIds.includes(
+                message.kind === 'permission_request' ? message.request_id : '',
+              )}
+              hasModeSwitch={proposal !== null && message.kind === 'mode_switch'}
+              onOpenPermission={() => openTab('labels')}
+              onOpenModeSwitch={() => openTab('plan')}
+              showDivider={
+                idx > 0 &&
+                messages[idx - 1].kind !== 'agent_step' &&
+                message.kind === 'agent_step'
+              }
+            />
+          </motion.div>
+        ))}
+      </AnimatePresence>
     </div>
   )
 }
@@ -84,7 +94,7 @@ function MessageRow({
 function UserBubble({ text }: { text: string }) {
   return (
     <div className="flex justify-end">
-      <div className="max-w-[78%] rounded-2xl rounded-br-md bg-brand/15 px-3 py-2 text-[13px] leading-relaxed text-fg">
+      <div className="max-w-[78%] rounded-2xl rounded-br-md bg-surface px-3 py-2 text-[13px] leading-relaxed text-fg">
         {text}
       </div>
     </div>
@@ -94,7 +104,7 @@ function UserBubble({ text }: { text: string }) {
 function AgentBubble({ message }: { message: Extract<ChatMessage, { kind: 'agent_text' }> }) {
   return (
     <div className="flex gap-2">
-      <span className="mt-0.5 shrink-0 text-[11px] text-muted">🤖</span>
+      <Bot className="mt-0.5 size-4 shrink-0 text-muted" />
       <div className="min-w-0 flex-1">
         <div className="text-[13px] leading-relaxed">{message.text}</div>
         <div className="mt-1 flex items-center gap-1.5">
@@ -110,8 +120,8 @@ function StepBlock({ message, showDivider }: { message: Extract<ChatMessage, { k
   return (
     <>
       {showDivider && <div className="my-2 border-t border-line" />}
-      <div className="flex gap-2 rounded-md bg-panel2 px-3 py-2">
-        <span className="mt-0.5 shrink-0 text-[11px] text-muted">🧠</span>
+      <div className="flex gap-2 bg-surface rounded-lg px-3 py-2">
+        <Brain className="mt-0.5 size-4 shrink-0 text-muted" />
         <div className="min-w-0 flex-1 text-[12px] leading-relaxed">
           {message.thought && <p className="mb-1 text-muted italic">{message.thought}</p>}
           {message.tool_name && (
@@ -125,7 +135,7 @@ function StepBlock({ message, showDivider }: { message: Extract<ChatMessage, { k
             </div>
           )}
           {message.result_preview && (
-            <div className="mt-1.5 rounded border border-line bg-bg p-2">
+            <div className="mt-1.5 rounded border border-line bg-panel p-2">
               <PlainText text={message.result_preview} />
               {message.truncated_lines && message.truncated_lines > 0 && (
                 <p className="mt-1 text-[10px] text-muted">…đã cắt bớt {message.truncated_lines} dòng</p>
@@ -147,12 +157,12 @@ function StepBlock({ message, showDivider }: { message: Extract<ChatMessage, { k
 function PermissionChatRow({ requestId, pending, onClick }: { requestId: string; pending: boolean; onClick: () => void }) {
   const t = useT()
   return (
-    <button type="button" onClick={onClick} className="flex items-center gap-2 rounded-md border p-2 text-left hover:bg-panel2">
+    <button type="button" onClick={onClick} className="flex items-center gap-2 rounded-md border border-line p-2 text-left hover:bg-surface2">
       <span className={`size-2 rounded-full ${pending ? 'bg-amber-500 animate-pulse' : 'bg-slate-400'}`} />
       <span className="flex-1 text-[12px]">
         {pending ? t('chat.permissionPending', { id: requestId }) : t('chat.permissionResolved', { id: requestId })}
       </span>
-      <span className="text-[11px] text-brand">{t('chat.view')}</span>
+      <span className="text-[11px] text-accent">{t('chat.view')}</span>
     </button>
   )
 }
@@ -160,10 +170,10 @@ function PermissionChatRow({ requestId, pending, onClick }: { requestId: string;
 function ModeSwitchChatRow({ pending, onClick }: { pending: boolean; onClick: () => void }) {
   const t = useT()
   return (
-    <button type="button" onClick={onClick} className="flex items-center gap-2 rounded-md border border-amber-500/30 bg-amber-500/5 p-2 text-left hover:bg-panel2">
+    <button type="button" onClick={onClick} className="flex items-center gap-2 rounded-md border border-warn/30 bg-warn/5 p-2 text-left hover:bg-surface2">
       <span className={`size-2 rounded-full ${pending ? 'bg-amber-500 animate-pulse' : 'bg-slate-400'}`} />
       <span className="flex-1 text-[12px]">{t('chat.modeSwitchPending')}</span>
-      <span className="text-[11px] text-brand">{t('chat.view')}</span>
+      <span className="text-[11px] text-accent">{t('chat.view')}</span>
     </button>
   )
 }

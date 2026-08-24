@@ -6,6 +6,37 @@ Tài liệu: [`../docs/plan/agent-box-plan.md`](../docs/plan/agent-box-plan.md),
 
 Quyết định đã chốt ở mục 12.1: **giao diện web, không làm CLI.**
 
+## Cài đặt & chạy local
+
+Yêu cầu: **Node.js ≥ 18**.
+
+```bash
+# 1. Clone repo
+git clone https://github.com/khaikhaichimtoonly-star/Cloud-Anget-P.git
+cd Cloud-Anget-P/frontend
+
+# 2. Cài dependencies
+npm install
+
+# 3. Chạy dev server
+npm run dev
+```
+
+Mở trình duyệt tại **http://localhost:3100**.
+
+**Không cần backend.** Frontend hiện chạy độc lập — dùng mock transport (`src/lib/transport/mock/`) mô phỏng một phiên agent đầy đủ 8 bước kịch bản bảo mật (mục 9.5.2 của kế hoạch). Bấm nút "Bước tiếp" ở góc trên bên phải để đi qua từng bước.
+
+### Các lệnh khác
+
+| Lệnh | Làm gì |
+|---|---|
+| `npm run dev` | Dev server tại `localhost:3100` |
+| `npm run build` | Build production ra `dist/` |
+| `npm run preview` | Xem bản production build |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | TypeScript check không emit |
+| `npm run test` | Vitest (hiện 14 test) |
+
 ## Năm khung — `src/panels/`
 
 Bảng 12.2 của kế hoạch. Khung ⑤ là khung mà Devin và OpenHands đều không có.
@@ -48,3 +79,54 @@ Vòng lặp agent là đồng bộ, giao diện web thì không. Bốn quy tắc
 2. Trả lời phải kèm `request_id` và backend kiểm `task_epoch` còn khớp — chặn việc trả lời một thẻ của phiên cũ.
 3. Agent **dừng thật** khi chờ, không chạy tiếp đoán trước câu trả lời.
 4. Mất WebSocket rồi kết nối lại thì hiện lại các yêu cầu **còn hạn**.
+
+## Trang Cài đặt — `src/components/settings/`
+
+Trang Cài đặt thay thế toàn bộ giao diện chính khi người dùng bấm "Cài đặt" ở thanh bên. Cấu trúc: thanh trên (nút quay lại + tiêu đề + ThemeToggle), thanh bên trái (14 mục nav chia 4 nhóm: AGENTS, MACHINES, FEATURES, ADMINISTRATION), và vùng nội dung bên phải.
+
+| File | Mục | Nội dung |
+|---|---|---|
+| `SettingsShell.tsx` | Layout toàn trang | Thanh trên + sidebar + vùng nội dung với AnimatePresence fade 150ms |
+| `SettingsSidebar.tsx` | Thanh nav trái | 14 mục với lucide icons, 4 nhóm, active highlight |
+| `AppearanceSettings.tsx` | Giao diện | Chọn theme Dark / Light / System + ngôn ngữ VI / EN |
+| `HarnessList.tsx` | Danh sách Harness | Bảng với tìm kiếm, bộ chọn mặc định, nút view/clone/edit/delete |
+| `HarnessEditor.tsx` | Trang sửa Harness | Form tên/mô tả/model, danh sách subagent với system prompt mở rộng, cảnh báo ảnh |
+| `ModelSelect.tsx` | Bộ chọn model | Dropdown danh sách model (Gemini, Groq, OpenRouter) |
+| `PlaceholderSettings.tsx` | Mục chưa làm | Icon + tiêu đề + badge "Sắp có" cho 12/14 mục còn lại |
+
+### Store Harness — `src/store/harnessStore.ts`
+
+Zustand + persist vào `localStorage` (key `agent-box:harnesses`). Hỗ trợ:
+- 4 model (Gemini 2.5 Flash/Pro, Groq Llama, OpenRouter)
+- 4 built-in harness (General, Code Review, Design Review, Security Audit) — không xoá được
+- 2 custom harness mẫu
+- 6 built-in subagent (Explore, Plan, Design, Build, Debug, Review)
+- CRUD đầy đủ: thêm/sửa/xoá harness, thêm/xoá subagent, sửa system prompt
+
+## Hệ thống thiết kế — CSS Tokens
+
+Toàn bộ giao diện dùng CSS custom properties định nghĩa trong `src/index.css`, qua `@theme inline` của Tailwind v4. Dark mode là mặc định, light mode kích hoạt bằng class `.light` trên `<html>`.
+
+| Token | Dark (mặc định) | Light | Dùng cho |
+|---|---|---|---|
+| `bg-bg` | `240 6% 7%` | `240 6% 97%` | Nền toàn trang |
+| `bg-panel` | `240 6% 10%` | `240 6% 100%` | Nền panel, thanh bên |
+| `bg-surface` | `240 6% 12%` | `240 6% 95%` | Thẻ nổi (card) |
+| `bg-surface2` | `240 5% 17%` | `240 5% 89%` | Hover, chip |
+| `text-fg` | `220 15% 88%` | `240 10% 14%` | Chữ chính |
+| `text-muted` | `240 5% 55%` | `240 5% 45%` | Chữ phụ |
+| `text-accent` | `239 84% 67%` | `239 84% 58%` | Indigo — nút chính, link |
+| `text-success` | `155 70% 48%` | (kế thừa) | Thành công, được phép |
+| `text-warn` | `38 92% 56%` | (kế thừa) | Cảnh báo, không tin được |
+| `text-danger` | `0 75% 55%` | (kế thừa) | Nguy hiểm, từ chối |
+| `rounded-card` | `16px` | — | Bo góc thẻ |
+| `rounded-chip` | `24px` | — | Bo góc chip/badge |
+| `bg-terminal` | `#131418` | `#f6f8fa` | Nền terminal |
+| `text-terminal-fg` | `#c9d1d9` | `#1f2328` | Chữ terminal |
+
+### Animation (motion/react)
+
+- Tin nhắn chat: fade + slide-up 8px, 150ms
+- Tab panel: fade 120ms khi chuyển tab
+- Section Cài đặt: fade 150ms giữa các mục
+- Subagent card: expand/collapse height 200ms

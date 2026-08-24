@@ -1,7 +1,7 @@
 /**
  * Layout chính — bản vẽ mặt bằng mục 12.3.
  */
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, type ReactNode } from 'react'
 import { useT } from './i18n/context'
 import { useTheme } from './hooks/useTheme'
 import { useAgentStore } from './store/agentStore'
@@ -17,6 +17,9 @@ import { ModeSwitchCard } from './components/ModeSwitchCard'
 import { LabelDot } from './components/LabelDot'
 import { FileTreePanel } from './components/panels/FileTreePanel'
 import { AuditPanel } from './components/panels/AuditPanel'
+import { SettingsShell } from './components/settings'
+import { motion, AnimatePresence } from 'motion/react'
+import { ClipboardList, Monitor, Folder, Terminal, ScrollText, Tag } from 'lucide-react'
 
 const TAB_LABEL_KEY: Record<PanelTabId, string> = {
   plan: 'tabs.plan',
@@ -27,13 +30,18 @@ const TAB_LABEL_KEY: Record<PanelTabId, string> = {
   audit: 'tabs.audit',
 }
 
-const TAB_ICON: Record<PanelTabId, string> = {
-  plan: '📋', sandbox: '🖥️', files: '📁', terminal: '⬛', labels: '🏷️', audit: '📜',
+const TAB_ICON: Record<PanelTabId, ReactNode> = {
+  plan: <ClipboardList className="size-3.5" />,
+  sandbox: <Monitor className="size-3.5" />,
+  files: <Folder className="size-3.5" />,
+  terminal: <Terminal className="size-3.5" />,
+  labels: <Tag className="size-3.5" />,
+  audit: <ScrollText className="size-3.5" />,
 }
 
 export default function App() {
   const t = useT()
-  const { theme, toggleTheme } = useTheme()
+  const { theme, resolvedTheme, setTheme, toggleTheme } = useTheme()
 
   const init = useAgentStore((s) => s.init)
   const teardown = useAgentStore((s) => s.teardown)
@@ -56,10 +64,22 @@ export default function App() {
   const closeTab = useUiStore((s) => s.closeTab)
   const closePanel = useUiStore((s) => s.closePanel)
   const splitRatio = useUiStore((s) => s.splitRatio)
+  const view = useUiStore((s) => s.view)
 
   const containerRef = useRef<HTMLDivElement>(null)
   const showModeSwitch = proposal !== null
   const labelsVisible = activeTab !== 'labels'
+
+  if (view === 'settings') {
+    return (
+      <SettingsShell
+        theme={theme}
+        resolvedTheme={resolvedTheme}
+        setTheme={setTheme}
+        onToggleTheme={toggleTheme}
+      />
+    )
+  }
 
   const renderActiveTab = () => {
     if (showModeSwitch && activeTab === 'plan') {
@@ -113,7 +133,7 @@ export default function App() {
 
           {/* Cột phải — Tab panels + LabelsLeasesPanel */}
           <div className="flex min-h-0 flex-col overflow-hidden" style={{ flex: 1 - splitRatio }}>
-            <div className="flex items-center gap-0.5 border-b border-line bg-panel px-1">
+            <div className="flex items-center gap-0.5 border-b border-accent bg-panel px-1">
               {openTabs.map((tab) => (
                 <button
                   key={tab}
@@ -121,10 +141,10 @@ export default function App() {
                   onClick={() => openTab(tab)}
                   aria-selected={activeTab === tab}
                   className={`flex items-center gap-1.5 border-b-2 px-2.5 py-1.5 text-[12px] font-medium transition ${
-                    activeTab === tab ? 'border-brand text-fg' : 'border-transparent text-muted hover:text-fg'
+                    activeTab === tab ? 'border-accent text-fg' : 'border-transparent text-muted hover:text-fg'
                   }`}
                 >
-                  <span className="text-[13px]">{TAB_ICON[tab]}</span>
+                  {TAB_ICON[tab]}
                   {t(TAB_LABEL_KEY[tab] as 'tabs.plan')}
                   <button
                     type="button"
@@ -142,7 +162,13 @@ export default function App() {
             <div className="min-h-0 flex-1 overflow-hidden">
               {activeTab && (
                 <div className="h-full" style={{ height: labelsVisible ? '60%' : '100%' }}>
-                  <div className="h-full overflow-auto">{renderActiveTab()}</div>
+                  <div className="h-full overflow-auto">
+                    <AnimatePresence mode="wait">
+                      <motion.div key={activeTab} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.12 }}>
+                        {renderActiveTab()}
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
                 </div>
               )}
               {labelsVisible && activeTab && (
@@ -174,14 +200,11 @@ function TopBar({
 }) {
   const t = useT()
   return (
-    <div className="flex h-12 shrink-0 items-center gap-3 border-b border-line bg-panel px-4">
+    <div className="flex h-11 shrink-0 items-center gap-3 border-b border-line bg-panel px-4">
       <span className={`inline-flex items-center gap-1 rounded px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide ${
-        mode === 'ACT' ? 'bg-amber-500/20 text-amber-700 dark:text-amber-300' : 'bg-blue-500/20 text-blue-700 dark:text-blue-300'
+        mode === 'ACT' ? 'bg-warn/10 text-warn' : 'bg-accent/15 text-accent'
       }`}>{mode}</span>
-      <span className="text-[11px] font-mono text-muted">epoch #{taskEpoch}</span>
-      <span className="text-[11px] font-mono text-muted">
-        {t('topBar.budget', { steps: budget.steps, tokens: budget.tokens.toLocaleString(), cost: budget.costUsd.toFixed(2), cap: budget.capUsd.toFixed(2) })}
-      </span>
+      <span className="text-[11px] text-muted">epoch #{taskEpoch} · {t('topBar.budget', { steps: budget.steps, tokens: budget.tokens.toLocaleString(), cost: budget.costUsd.toFixed(2), cap: budget.capUsd.toFixed(2) })}</span>
       <div className="flex-1" />
       <LabelDot integrity={context.integrity_floor as 'duoc_nguoi_dung_cho_phep'} confidentiality={context.confidentiality_ceiling as 'cong_khai'} />
       {scenarioTotal > 0 && (
@@ -192,7 +215,7 @@ function TopBar({
             {t('topBar.rejectBundle')}
           </label>
           <button type="button" onClick={onStepNext} disabled={scenarioIndex >= scenarioTotal}
-            className="rounded bg-brand px-2 py-0.5 text-[11px] font-medium text-brandfg disabled:opacity-40">{t('topBar.stepNext')}</button>
+            className="rounded bg-accent px-2 py-0.5 text-[11px] font-medium text-accentfg disabled:opacity-40">{t('topBar.stepNext')}</button>
           <button type="button" onClick={onReset}
             className="rounded border border-line px-2 py-0.5 text-[11px] text-muted hover:text-fg">{t('topBar.reset')}</button>
         </div>

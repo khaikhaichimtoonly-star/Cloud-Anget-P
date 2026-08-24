@@ -49,9 +49,9 @@ export function Chip({
 }) {
   const tones: Record<string, string> = {
     neutral: 'bg-panel2 text-muted ring-1 ring-line',
-    brand: 'bg-brand/15 text-brand ring-1 ring-brand/40',
-    warn: 'bg-amber-500/15 text-amber-700 ring-1 ring-amber-500/40 dark:text-amber-300',
-    danger: 'bg-red-500/15 text-red-700 ring-1 ring-red-500/40 dark:text-red-300',
+    brand: 'bg-accent/15 text-accent ring-1 ring-accent/40',
+    warn: 'bg-warn/10 text-warn ring-1 ring-warn/40',
+    danger: 'bg-danger/10 text-danger ring-1 ring-danger/40',
   }
   return (
     <span

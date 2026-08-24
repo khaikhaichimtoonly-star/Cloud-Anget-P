@@ -49,13 +49,13 @@ export function ModeSwitchCard({ proposal, rejectBundle = false }: Props) {
   const effectiveRejected = rejectBundle || proposal.bundled_lease_rejected
 
   return (
-    <div className="rounded-lg border-2 border-amber-500/50 bg-bg p-4 shadow-lg shadow-amber-500/10">
+    <div className="rounded-lg border-2 border-warn/50 bg-bg p-4 shadow-lg">
       {/* 1. Dòng phạm vi đã gộp */}
       <div
         className={`mb-3 rounded-md px-3 py-2 text-[13px] font-semibold leading-relaxed ${
           effectiveRejected
-            ? 'border border-red-500/40 bg-red-50 text-red-800 dark:bg-red-950/20 dark:text-red-300'
-            : 'border border-emerald-500/30 bg-emerald-50 text-emerald-800 dark:bg-emerald-950/20 dark:text-emerald-200'
+            ? 'border border-danger/40 bg-danger/5 text-danger'
+            : 'border border-success/30 bg-success/5 text-success'
         }`}
       >
         {scopeLine}
@@ -77,7 +77,7 @@ export function ModeSwitchCard({ proposal, rejectBundle = false }: Props) {
                 key={labelId}
                 type="button"
                 onClick={() => openSource(labelId)}
-                className="rounded bg-panel2 px-1.5 py-px text-[11px] font-mono text-brand hover:underline"
+                className="rounded bg-panel2 px-1.5 py-px text-[11px] font-mono text-accent hover:underline"
               >
                 {labelId}
               </button>
@@ -90,7 +90,7 @@ export function ModeSwitchCard({ proposal, rejectBundle = false }: Props) {
       {outOfScopeSteps.length > 0 && (
         <>
           <SectionLabel>
-            <span className="text-red-600 dark:text-red-400">
+            <span className="text-danger">
               ⚠ Bước ngoài phạm vi
             </span>
           </SectionLabel>
@@ -98,7 +98,7 @@ export function ModeSwitchCard({ proposal, rejectBundle = false }: Props) {
             {outOfScopeSteps.map((step) => (
               <li
                 key={step.id}
-                className="rounded border border-red-400/40 bg-red-50 px-3 py-1.5 text-[12px] text-red-800 dark:bg-red-950/20 dark:text-red-300"
+                className="rounded border border-danger/40 bg-danger/5 px-3 py-1.5 text-[12px] text-danger"
               >
                 <span className="font-semibold">{step.id}</span>
                 : {step.description}
@@ -113,14 +113,14 @@ export function ModeSwitchCard({ proposal, rejectBundle = false }: Props) {
         <button
           type="button"
           onClick={handleAccept}
-          className="rounded-md bg-emerald-600 px-4 py-1.5 text-[13px] font-semibold text-white transition hover:bg-emerald-700"
+          className="rounded-md bg-success px-4 py-1.5 text-[13px] font-semibold text-white transition hover:bg-success/80"
         >
           Chuyển sang Act
         </button>
         <button
           type="button"
           onClick={handleEdit}
-          className="rounded-md border border-line px-3 py-1.5 text-[13px] font-medium text-muted transition hover:bg-panel2"
+          className="rounded-md border border-line px-3 py-1.5 text-[13px] font-medium text-muted transition hover:bg-surface2"
         >
           Sửa kế hoạch
         </button>

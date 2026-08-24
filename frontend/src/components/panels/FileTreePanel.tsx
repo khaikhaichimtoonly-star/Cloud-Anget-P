@@ -47,7 +47,7 @@ function TreeNode({ node, depth, selectedPath, onSelect }: {
         type="button"
         onClick={() => (isDir ? setOpen(!open) : onSelect(node.path))}
         className={`flex w-full items-center gap-1 rounded px-1.5 py-0.5 text-left text-[12px] transition hover:bg-panel2 ${
-          node.path === selectedPath ? 'bg-brand/15 text-brand' : ''
+          node.path === selectedPath ? 'bg-accent/15 text-accent' : ''
         }`}
         style={{ paddingLeft: `${depth * 16 + 4}px` }}
       >

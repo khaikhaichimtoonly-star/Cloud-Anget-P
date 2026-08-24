@@ -62,6 +62,7 @@ export function Sidebar({
   const setAccountMenuOpen = useUiStore((s) => s.setAccountMenuOpen)
   const sessionTab = useUiStore((s) => s.sessionTab)
   const setSessionTab = useUiStore((s) => s.setSessionTab)
+  const setView = useUiStore((s) => s.setView)
   const sessions = useAgentStore((s) => s.sessions)
   const activeSessionId = useAgentStore((s) => s.activeSessionId)
 
@@ -80,14 +81,14 @@ export function Sidebar({
           <Plus className="size-4" />
         </IconButton>
         <div className="mt-auto flex flex-col items-center gap-2">
-          <IconButton label={t('sidebar.settings')}>
+          <IconButton label={t('sidebar.settings')} onClick={() => setView('settings')}>
             <Settings className="size-4" />
           </IconButton>
           <IconButton label={t('sidebar.help')}>
             <CircleQuestionMark className="size-4" />
           </IconButton>
           <span
-            className="flex size-7 items-center justify-center rounded-full bg-brand text-[11px] font-bold text-brandfg"
+            className="flex size-7 items-center justify-center rounded-full bg-accent text-[11px] font-bold text-accentfg"
             title={MOCK_ACCOUNT.email}
           >
             {MOCK_ACCOUNT.initials}
@@ -120,7 +121,7 @@ export function Sidebar({
           className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left hover:bg-panel2"
           aria-expanded={accountMenuOpen}
         >
-          <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-brand text-[11px] font-bold text-brandfg">
+          <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-accent text-[11px] font-bold text-accentfg">
             {MOCK_ACCOUNT.initials}
           </span>
           <span className="min-w-0 flex-1">
@@ -134,7 +135,11 @@ export function Sidebar({
         {accountMenuOpen && (
           <div className="absolute left-2 right-2 z-20 mt-1 overflow-hidden rounded-md border border-line bg-panel shadow-lg">
             <MenuItem icon={<UserRound className="size-4" />} label={t('sidebar.accountMenu')} />
-            <MenuItem icon={<Settings className="size-4" />} label={t('sidebar.settings')} />
+            <MenuItem
+              icon={<Settings className="size-4" />}
+              label={t('sidebar.settings')}
+              onClick={() => { setView('settings'); setAccountMenuOpen(false) }}
+            />
             <MenuItem icon={<LogOut className="size-4" />} label={t('sidebar.signOut')} />
           </div>
         )}
@@ -144,7 +149,7 @@ export function Sidebar({
       <div className="flex items-center gap-1 px-2 pt-2">
         <button
           type="button"
-          className="flex flex-1 items-center gap-1.5 rounded-md bg-brand px-2 py-1.5 text-[12px] font-semibold text-brandfg hover:opacity-90"
+          className="flex flex-1 items-center gap-1.5 rounded-md bg-accent px-2 py-1.5 text-[12px] font-semibold text-accentfg hover:opacity-90"
         >
           <Plus className="size-4" />
           {t('sidebar.newSession')}
@@ -203,7 +208,7 @@ export function Sidebar({
 
       {/* Đáy */}
       <div className="border-t border-line px-2 py-1.5">
-        <MenuItem icon={<Settings className="size-4" />} label={t('sidebar.settings')} />
+        <MenuItem icon={<Settings className="size-4" />} label={t('sidebar.settings')} onClick={() => setView('settings')} />
         <MenuItem icon={<CircleQuestionMark className="size-4" />} label={t('sidebar.help')} />
       </div>
     </aside>
@@ -216,7 +221,7 @@ function SessionRow({ session, active }: { session: SessionSummary; active: bool
     <button
       type="button"
       className={`w-full rounded-md px-2 py-1.5 text-left transition ${
-        active ? 'bg-panel2 ring-1 ring-line' : 'hover:bg-panel2'
+        active ? 'bg-surface2 border-l-2 border-accent rounded-r-md' : 'hover:bg-surface2'
       }`}
     >
       <span className="flex items-center gap-2">
@@ -265,7 +270,7 @@ function TabButton({
       onClick={onClick}
       aria-selected={active}
       className={`-mb-px border-b-2 px-2 pb-1.5 pt-1 text-[12px] font-medium transition ${
-        active ? 'border-brand text-fg' : 'border-transparent text-muted hover:text-fg'
+        active ? 'border-accent text-fg' : 'border-transparent text-muted hover:text-fg'
       }`}
     >
       {label}
@@ -273,10 +278,11 @@ function TabButton({
   )
 }
 
-function MenuItem({ icon, label }: { icon: ReactNode; label: string }) {
+function MenuItem({ icon, label, onClick }: { icon: ReactNode; label: string; onClick?: () => void }) {
   return (
     <button
       type="button"
+      onClick={onClick}
       className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left text-[12px] text-muted hover:bg-panel2 hover:text-fg"
     >
       {icon}

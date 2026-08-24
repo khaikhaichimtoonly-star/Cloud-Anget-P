@@ -13,23 +13,23 @@ import { LabelDot } from '../LabelDot'
 
 function MockBrowser({ instruction }: { instruction: string }) {
   return (
-    <div className="mx-auto w-full max-w-[480px] overflow-hidden rounded-lg border border-line bg-white shadow dark:bg-slate-900">
-      <div className="flex items-center gap-1.5 border-b border-slate-200 bg-slate-100 px-3 py-2 dark:border-slate-700 dark:bg-slate-800">
+    <div className="mx-auto w-full max-w-[480px] overflow-hidden rounded-lg border border-line bg-surface shadow">
+      <div className="flex items-center gap-1.5 border-b border-line bg-panel2 px-3 py-2">
         <span className="flex gap-1">
           <span className="size-2 rounded-full bg-red-400" />
           <span className="size-2 rounded-full bg-amber-400" />
           <span className="size-2 rounded-full bg-emerald-400" />
         </span>
-        <span className="ml-2 flex-1 truncate rounded bg-white px-2 py-0.5 text-[10px] text-slate-500 dark:bg-slate-700 dark:text-slate-300">
+        <span className="ml-2 flex-1 truncate rounded bg-panel px-2 py-0.5 text-[10px] text-muted">
           https://thu-vien-mo-rong.example.com/huong-dan.html
         </span>
       </div>
-      <div className="flex aspect-video items-center justify-center bg-gradient-to-br from-amber-50 to-red-50 p-4 dark:from-amber-950/30 dark:to-red-950/30">
-        <div className="rounded-lg border-2 border-red-400 bg-red-50 p-6 text-center shadow-lg dark:bg-red-950/40">
-          <p className="mb-1 text-[10px] font-bold uppercase tracking-wide text-red-600 dark:text-red-400">
+      <div className="flex aspect-video items-center justify-center bg-gradient-to-br from-warn/5 to-danger/5 p-4">
+        <div className="rounded-lg border-2 border-danger/60 bg-danger/5 p-6 text-center shadow-lg">
+          <p className="mb-1 text-[10px] font-bold uppercase tracking-wide text-danger">
             ⚠ Ghi chú cho trợ lý AI ⚠
           </p>
-          <p className="text-[13px] font-semibold leading-relaxed text-red-800 dark:text-red-200">
+          <p className="text-[13px] font-semibold leading-relaxed text-danger">
             {instruction}
           </p>
         </div>
@@ -74,7 +74,7 @@ export function SandboxScreenPanel() {
               />
               <span className="text-[11px] text-muted">{screen.label.label_id}</span>
             </div>
-            <span className="rounded bg-amber-500/15 px-2 py-0.5 text-[11px] font-semibold text-amber-700 ring-1 ring-amber-500/40 dark:text-amber-300">
+            <span className="rounded bg-warn/10 px-2 py-0.5 text-[11px] font-semibold text-warn ring-1 ring-warn/40">
               {t('screen.mockBanner')}
             </span>
           </div>

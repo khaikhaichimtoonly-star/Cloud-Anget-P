@@ -9,7 +9,7 @@ Một **AI Computer tự host** — agent có một máy tính riêng để làm
 
 Điều kiện "**cấp sau**" là chỗ khác biệt. Nó chặn đúng lỗi mà các agent hiện tại mắc: người dùng đồng ý một hành động vô hại, rồi chuẩn thuận đó bị mang sang đúng bước rò rỉ dữ liệu mà không phát sinh thêm một lần hỏi nào (arXiv 2510.26328).
 
-**Trạng thái: đang ở giai đoạn thiết kế.** Chưa có code chạy được. Cấu trúc thư mục dưới đây là bộ khung để bắt đầu.
+**Trạng thái: frontend đã chạy được (mock), backend đang thiết kế.** Cấu trúc thư mục dưới đây là bộ khung để bắt đầu. Xem [`frontend/README.md`](frontend/README.md) để cài và chạy local.
 
 ## Tài liệu
 
