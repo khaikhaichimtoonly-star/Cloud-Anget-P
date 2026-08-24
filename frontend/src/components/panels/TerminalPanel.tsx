@@ -16,7 +16,7 @@ export function TerminalPanel() {
           <p className="text-[12px] text-muted">{t('terminal.empty')}</p>
         </div>
       ) : (
-        <div className="bg-[#0d1117] text-[#c9d1d9] font-mono text-[12px] leading-relaxed p-3 min-h-full">
+        <div className="bg-terminal text-terminal-fg font-mono text-[12px] leading-relaxed p-3 min-h-full">
           {lines.map((line, index) => (
             <div key={index} className="flex gap-2">
               <span className="shrink-0 text-[#58a6ff] select-none">$</span>

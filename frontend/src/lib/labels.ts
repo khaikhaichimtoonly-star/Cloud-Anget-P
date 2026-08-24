@@ -11,11 +11,7 @@ export interface AxisMeta {
   label: string
   /** Lớp Tailwind cho chấm màu. */
   dotClass: string
-  /**
-   * Lớp Tailwind cho chữ/badge. PHẢI có cặp sáng/tối (`text-x-700
-   * dark:text-x-300`) — chỉ dùng biến thể `-300` thì ở chế độ sáng chữ chìm
-   * vào nền, không đọc được. Ý nghĩa màu không đổi giữa hai chế độ.
-   */
+  /** Lớp Tailwind cho chữ/badge. Dùng CSS token — tự đổi giữa sáng/tối. */
   badgeClass: string
 }
 
@@ -23,14 +19,14 @@ export const INTEGRITY_META: Record<Integrity, AxisMeta> = {
   duoc_nguoi_dung_cho_phep: {
     value: 'duoc_nguoi_dung_cho_phep',
     label: 'Được người dùng cho phép',
-    dotClass: 'bg-emerald-500',
-    badgeClass: 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 ring-1 ring-emerald-500/40',
+    dotClass: 'bg-success',
+    badgeClass: 'bg-success/10 text-success ring-1 ring-success/40',
   },
   khong_tin_duoc: {
     value: 'khong_tin_duoc',
     label: 'Không tin được',
-    dotClass: 'bg-amber-500',
-    badgeClass: 'bg-amber-500/15 text-amber-700 dark:text-amber-300 ring-1 ring-amber-500/40',
+    dotClass: 'bg-warn',
+    badgeClass: 'bg-warn/10 text-warn ring-1 ring-warn/40',
   },
 }
 
@@ -39,19 +35,19 @@ export const CONFIDENTIALITY_META: Record<Confidentiality, AxisMeta> = {
     value: 'cong_khai',
     label: 'Công khai',
     dotClass: 'bg-slate-400',
-    badgeClass: 'bg-slate-500/15 text-slate-700 dark:text-slate-300 ring-1 ring-slate-500/40',
+    badgeClass: 'bg-surface2 text-muted ring-1 ring-line',
   },
   noi_bo: {
     value: 'noi_bo',
     label: 'Nội bộ',
-    dotClass: 'bg-blue-500',
-    badgeClass: 'bg-blue-500/15 text-blue-700 dark:text-blue-300 ring-1 ring-blue-500/40',
+    dotClass: 'bg-accent',
+    badgeClass: 'bg-accent/15 text-accent ring-1 ring-accent/40',
   },
   bi_mat: {
     value: 'bi_mat',
     label: 'Bí mật',
-    dotClass: 'bg-red-500',
-    badgeClass: 'bg-red-500/15 text-red-700 dark:text-red-300 ring-1 ring-red-500/40',
+    dotClass: 'bg-danger',
+    badgeClass: 'bg-danger/10 text-danger ring-1 ring-danger/40',
   },
 }
 

@@ -65,8 +65,8 @@ export function PermissionCard({ request }: { request: PermissionRequest }) {
         effectiveResolved
           ? 'border-line bg-bg'
           : timedOut
-            ? 'border-red-500/50 bg-red-50 dark:bg-red-950/20'
-            : 'border-amber-500/50 bg-bg shadow-amber-500/10'
+            ? 'border-danger/50 bg-danger/5'
+            : 'border-warn/50 bg-bg'
       }`}
     >
       {/* 1. Tool + tham số */}
@@ -118,7 +118,7 @@ export function PermissionCard({ request }: { request: PermissionRequest }) {
                 key={labelId}
                 type="button"
                 onClick={() => openSource(labelId)}
-                className="rounded bg-panel2 px-1.5 py-px text-[11px] font-mono text-brand hover:underline"
+                className="rounded bg-panel2 px-1.5 py-px text-[11px] font-mono text-accent hover:underline"
               >
                 {labelId}
               </button>
@@ -148,7 +148,7 @@ export function PermissionCard({ request }: { request: PermissionRequest }) {
         </div>
       )}
       {timedOut && !isResolved && (
-        <p className="mt-2 text-[12px] font-medium text-red-600 dark:text-red-400">
+        <p className="mt-2 text-[12px] font-medium text-danger">
           Yêu cầu đã quá hạn 10 phút — tự động tính là TỪ CHỐI.
         </p>
       )}
@@ -167,10 +167,10 @@ function PermissionButton({
 
   const style =
     button === 'tu_choi'
-      ? 'border-red-300 text-red-700 hover:bg-red-50 dark:border-red-700 dark:text-red-300 dark:hover:bg-red-950/30'
+      ? 'border-danger/60 text-danger hover:bg-danger/5'
       : button === 'chuan_thuan_artifact'
-        ? 'border-amber-400 text-amber-800 hover:bg-amber-50 dark:border-amber-600 dark:text-amber-200 dark:hover:bg-amber-950/30'
-        : 'border-brand/50 text-brand hover:bg-brand/10'
+        ? 'border-warn/60 text-warn hover:bg-warn/5'
+        : 'border-accent/50 text-accent hover:bg-accent/10'
 
   return (
     <button
@@ -196,9 +196,9 @@ function DiffView({ diff, filePath }: { diff: DiffLine[]; filePath: string }) {
           key={index}
           className={`whitespace-pre ${
             dline.kind === 'them'
-              ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-300'
+              ? 'bg-success/10 text-success'
               : dline.kind === 'bot'
-                ? 'bg-red-500/10 text-red-700 dark:text-red-300'
+                ? 'bg-danger/10 text-danger'
                 : ''
           }`}
         >

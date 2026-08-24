@@ -20,7 +20,34 @@ export const ALL_PANEL_TABS: PanelTabId[] = [
   'audit',
 ]
 
+export type AppView = 'app' | 'settings'
+export type SettingsSection =
+  | 'harness' | 'instructions' | 'skills' | 'llm-api-keys' | 'scheduled-sessions'
+  | 'configuration' | 'secrets' | 'browser'
+  | 'integrations' | 'notifications' | 'pull-requests' | 'appearance'
+  | 'api' | 'billing'
+
+const LANG_KEY = 'agent-box:lang'
+
+function readInitialLang(): 'vi' | 'en' {
+  if (typeof window === 'undefined') return 'vi'
+  return window.localStorage.getItem(LANG_KEY) === 'en' ? 'en' : 'vi'
+}
+
 interface UiState {
+  view: AppView
+  setView: (view: AppView) => void
+
+  settingsSection: SettingsSection
+  setSettingsSection: (section: SettingsSection) => void
+
+  /** Harness đang mở trong editor; null → hiện danh sách harness. */
+  editingHarnessId: string | null
+  setEditingHarnessId: (id: string | null) => void
+
+  settingsLang: 'vi' | 'en'
+  setSettingsLang: (lang: 'vi' | 'en') => void
+
   sidebarCollapsed: boolean
   toggleSidebar: () => void
 
@@ -61,6 +88,18 @@ export const MIN_SPLIT = 0.25
 export const MAX_SPLIT = 0.75
 
 export const useUiStore = create<UiState>((set) => ({
+  view: 'app',
+  setView: (view) => set({ view }),
+
+  settingsSection: 'harness',
+  setSettingsSection: (section) => set({ settingsSection: section }),
+
+  editingHarnessId: null,
+  setEditingHarnessId: (id) => set({ editingHarnessId: id }),
+
+  settingsLang: readInitialLang(),
+  setSettingsLang: (lang) => set({ settingsLang: lang }),
+
   sidebarCollapsed: false,
   toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
 

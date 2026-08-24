@@ -1,79 +1,82 @@
-/*
- * Token màu cho hai chế độ sáng / tối.
- *
- * Cách làm: định nghĩa custom property dạng thành phần HSL trên `:root` và
- * `.dark`, rồi map vào `@theme inline` để utility của Tailwind đọc biến TẠI
- * use-site. Nhờ vậy chỉ cần bật/tắt class `dark` trên <html> là toàn bộ giao
- * diện đổi màu, không cần sinh hai bộ class.
- *
- * Tailwind v4 không dùng `tailwind.config.js` và `postcss.config.js` —
- * đừng tạo hai file đó, plugin `@tailwindcss/vite` lo hết.
- */
 @import 'tailwindcss';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-:root {
-  --c-bg: 210 20% 97%;
-  --c-panel: 0 0% 100%;
-  --c-panel2: 210 20% 94%;
-  --c-line: 214 18% 87%;
-  --c-fg: 222 32% 14%;
-  --c-muted: 215 14% 42%;
-  --c-brand: 250 70% 52%;
-  --c-brandfg: 0 0% 100%;
+/* ── Dark (mặc định, phong cách vorflux/Devin) ── */
+:root,
+.dark {
+  --c-bg:        240 6% 7%;
+  --c-panel:     240 6% 10%;
+  --c-panel2:    240 5% 13%;
+  --c-surface:   240 6% 12%;
+  --c-surface2:  240 5% 17%;
+  --c-line:      240 5% 22%;
+  --c-fg:        220 15% 88%;
+  --c-muted:     240 5% 55%;
+
+  --c-accent:    239 84% 67%;
+  --c-accent-fg: 0 0% 100%;
+  --c-ring:      239 84% 67%;
+
+  --c-success:   155 70% 48%;
+  --c-warn:      38 92% 56%;
+  --c-danger:    0 75% 55%;
+
+  --radius-card: 16px;
+  --radius-chip: 24px;
 }
 
-.dark {
-  --c-bg: 222 22% 7%;
-  --c-panel: 222 18% 10%;
-  --c-panel2: 222 16% 15%;
-  --c-line: 222 12% 23%;
-  --c-fg: 210 24% 92%;
-  --c-muted: 215 14% 62%;
-  --c-brand: 250 80% 70%;
-  --c-brandfg: 250 45% 10%;
+/* ── Light (giữ lại cho ThemeToggle) ── */
+.light {
+  --c-bg:        240 6% 97%;
+  --c-panel:     240 6% 100%;
+  --c-panel2:    240 5% 94%;
+  --c-surface:   240 6% 95%;
+  --c-surface2:  240 5% 89%;
+  --c-line:      240 5% 88%;
+  --c-fg:        240 10% 14%;
+  --c-muted:     240 5% 45%;
+
+  --c-accent:    239 84% 58%;
+  --c-accent-fg: 0 0% 100%;
+  --c-ring:      239 84% 58%;
+
+  --color-terminal: #f6f8fa;
+  --color-terminal-fg: #1f2328;
 }
 
 @theme inline {
-  --color-bg: hsl(var(--c-bg));
-  --color-panel: hsl(var(--c-panel));
-  --color-panel2: hsl(var(--c-panel2));
-  --color-line: hsl(var(--c-line));
-  --color-fg: hsl(var(--c-fg));
-  --color-muted: hsl(var(--c-muted));
-  --color-brand: hsl(var(--c-brand));
-  --color-brandfg: hsl(var(--c-brandfg));
+  --color-bg:        hsl(var(--c-bg));
+  --color-panel:     hsl(var(--c-panel));
+  --color-panel2:    hsl(var(--c-panel2));
+  --color-surface:   hsl(var(--c-surface));
+  --color-surface2:  hsl(var(--c-surface2));
+  --color-line:      hsl(var(--c-line));
+  --color-fg:        hsl(var(--c-fg));
+  --color-muted:     hsl(var(--c-muted));
+  --color-accent:    hsl(var(--c-accent));
+  --color-accentfg:  hsl(var(--c-accent-fg));
+  --color-ring:      hsl(var(--c-ring));
+  --color-success:   hsl(var(--c-success));
+  --color-warn:      hsl(var(--c-warn));
+  --color-danger:    hsl(var(--c-danger));
+  --color-terminal:  #131418;
+  --color-terminal-fg: #c9d1d9;
+
+  --radius-card:  var(--radius-card);
+  --radius-chip:  var(--radius-chip);
 }
 
-html,
-body,
-#root {
-  height: 100%;
-}
+html, body, #root { height: 100%; }
 
 body {
   margin: 0;
   background-color: hsl(var(--c-bg));
   color: hsl(var(--c-fg));
-  font-family:
-    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
-    'Noto Sans', sans-serif;
+  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Thanh cuộn mỏng, theo màu chủ đề — mặc định của Chromium quá tương phản ở dark mode. */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: hsl(var(--c-line)) transparent;
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: hsl(var(--c-line));
-  border-radius: 4px;
-}
+* { scrollbar-width: thin; scrollbar-color: hsl(var(--c-line)) transparent; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background-color: hsl(var(--c-line)); border-radius: 4px; }

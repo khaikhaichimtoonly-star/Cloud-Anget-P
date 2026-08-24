@@ -13,8 +13,20 @@ import { I18nContext, interpolate, lookup, type Lang, type TKey, type TVars } fr
 
 const DICTS: Record<Lang, unknown> = { vi, en }
 
+const LANG_KEY = 'agent-box:lang'
+
+function readInitialLang(): Lang {
+  if (typeof window === 'undefined') return 'vi'
+  return window.localStorage.getItem(LANG_KEY) === 'en' ? 'en' : 'vi'
+}
+
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [lang, setLang] = useState<Lang>('vi')
+  const [lang, setLangState] = useState<Lang>(readInitialLang)
+
+  const setLang = useCallback((next: Lang) => {
+    setLangState(next)
+    if (typeof window !== 'undefined') window.localStorage.setItem(LANG_KEY, next)
+  }, [])
 
   const t = useCallback(
     (key: TKey, vars?: TVars) => {
@@ -24,7 +36,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     [lang],
   )
 
-  const value = useMemo(() => ({ lang, setLang, t }), [lang, t])
+  const value = useMemo(() => ({ lang, setLang, t }), [lang, setLang, t])
 
   return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>
 }

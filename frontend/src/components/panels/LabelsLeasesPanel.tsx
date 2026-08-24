@@ -45,7 +45,7 @@ function Tab({ active, onClick, children }: { active: boolean; onClick: () => vo
       onClick={onClick}
       aria-selected={active}
       className={`rounded px-2 py-0.5 font-medium transition ${
-        active ? 'bg-brand/15 text-brand' : 'text-muted hover:text-fg'
+        active ? 'bg-accent/15 text-accent' : 'text-muted hover:text-fg'
       }`}
     >
       {children}
@@ -118,7 +118,7 @@ function ContextTab() {
                       key={labelId}
                       type="button"
                       onClick={() => openSource(labelId)}
-                      className="rounded bg-panel2 px-1.5 py-px text-[10px] font-mono text-brand hover:underline"
+                      className="rounded bg-panel2 px-1.5 py-px text-[10px] font-mono text-accent hover:underline"
                     >
                       {labelId}
                     </button>
@@ -225,7 +225,7 @@ function LeaseRow({ lease, onRevoke }: { lease: Lease; onRevoke?: () => void }) 
           <button
             type="button"
             onClick={onRevoke}
-            className="shrink-0 rounded px-2 py-0.5 text-[11px] font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/30"
+            className="shrink-0 rounded px-2 py-0.5 text-[11px] font-medium text-danger hover:bg-danger/5"
           >
             {t('labels.leaseRevoke')}
           </button>
