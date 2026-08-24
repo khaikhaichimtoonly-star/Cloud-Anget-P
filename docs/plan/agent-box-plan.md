@@ -58,7 +58,7 @@ Mọi từ viết tắt trong tài liệu này đều được giải thích nga
 | **ReAct** (Reasoning + Acting — suy luận xen kẽ hành động) | Mô hình chạy agent: mỗi lượt LLM viết một đoạn suy nghĩ ngắn rồi chọn **một** hành động, thấy kết quả thật, rồi mới chọn bước sau. **Đây là mô hình Agent Core của dự án dùng** — xem mục 5.3. arXiv 2210.03629. |
 | **Plan-then-execute** (lập kế hoạch trước rồi thực thi) | Mô hình đối lập: LLM viết toàn bộ kế hoạch nhiều bước ngay từ đầu, sau đó một bộ thực thi chạy lần lượt mà không hỏi lại LLM. Mục 5.3.2 giải thích vì sao dự án **không** chọn cách này. |
 | **Plan-Act-Replan** (lai: có kế hoạch, sửa khi lệch) | Có kế hoạch toàn cục nhưng mỗi bước vẫn do LLM chọn theo kết quả thật, và lập lại kế hoạch khi đi lệch. Dự án dùng dạng nhẹ của mô hình này (mục 5.3.3). |
-| **Reflexion** (tự phê bình rồi thử lại) | Sau khi thất bại, agent tự viết một đoạn phê bình chính nó rồi thử lại. Là **cơ chế thử lại**, không phải mô hình chọn hành động. **Ngoài phạm vi đồ án** — lý do ở mục 5.3.5. arXiv 2303.11366. |
+| **Reflexion** (tự phê bình rồi thử lại) | Sau khi thất bại, agent tự viết một đoạn phê bình chính nó rồi thử lại. Là **cơ chế thử lại**, không phải mô hình chọn hành động. **Ngoài phạm vi đồ án** — lý do ở mục 5.3.7. arXiv 2303.11366. |
 
 ### 0.2 Thuật ngữ bảo mật
 
@@ -2586,16 +2586,16 @@ Sáu việc sau **đã nằm ngoài** tổng 34,1-41,2 từ đầu; ghi lại đ
 
 - **3 người:** làm đúng phạm vi sau cắt (30,1-35,7). Đây là **cấu hình khuyến nghị duy nhất giữ được cả bốn đóng góp**.
 
-- **2 người:** phạm vi sau cắt vẫn thiếu 1,8-7,2 tuần-người, nên phải cắt thêm **ngay từ tuần 0, không chờ Gate 2**. Đường cắt bổ sung, theo thứ tự ưu tiên bỏ:
+- **2 người:** phạm vi sau cắt vẫn thiếu **4,1-9,7 tuần-người**, nên phải cắt thêm **ngay từ tuần 0, không chờ Gate 2**. Đường cắt bổ sung, theo thứ tự ưu tiên bỏ (cơ sở: **150,5-178,5 ngày**; Phần VIII sau đường cắt 14.2 còn **12-15 ngày** vì 14.2 chỉ cắt 1 ngày render PDF):
 
-  | Bỏ thêm | Ngày còn lại của Phần VIII sau cắt là 11-14 | Phạm vi mới |
+  | Bỏ thêm | Tiết kiệm | Phạm vi mới |
   |---|---|---|
-  | **Bỏ toàn bộ Phần VIII (computer use)** | −11-14 ngày | **127-151 ngày = 25,5-30 tuần-người** |
-  | Bỏ thêm khung ③ terminal (2-3 ngày) | −2-3 ngày | **124-148 ngày = 25-29,5 tuần-người** |
+  | **Bỏ toàn bộ Phần VIII (computer use)** | −12-15 ngày | **138,5-163,5 ngày = 27,7-32,7 tuần-người** |
+  | Bỏ thêm khung ③ terminal | −2-3 ngày | **136,5-160,5 ngày = 27,3-32,1 tuần-người** |
 
-  Ngay cả sau hai lần bỏ này, đầu trên (29,5) vẫn vượt ngân sách 26. Nghĩa là **với 2 người, kế hoạch chỉ vừa nếu mọi ước lượng rơi về đầu dưới** — và phải chấp nhận **mất Đ3 và mất VPI-Bench**, chỉ còn Đ1 + Đ4 đo trên AgentDojo. Đây là đánh đổi phải nói rõ với giảng viên hướng dẫn ngay tuần 0.
+  Đọc thẳng con số này: **ngay cả sau hai lần bỏ trên, đầu dưới (27,3) vẫn vượt ngân sách 26 tuần-người của 2 người.** Nghĩa là **với 2 người, kế hoạch không vừa 13 tuần kể cả khi mọi ước lượng rơi về đầu dưới** — và hai lần bỏ đó đã phải trả giá **mất Đ3 và mất VPI-Bench**, chỉ còn Đ1 + Đ4 đo trên AgentDojo. Với 2 người có đúng ba lựa chọn thật, phải chọn ngay tuần 0: (a) cắt sâu hơn nữa vào Phần XII — bỏ luôn khung ② xem file, còn ba khung (chat + terminal bỏ rồi nên là chat + bảng nhãn + cây file rút gọn), tiết kiệm thêm khoảng 2 ngày, vẫn chỉ về khoảng **26,9-31,7**; (b) xin kéo dài đồ án thêm **2-6 tuần lịch**; hoặc (c) bổ sung người thứ ba. Đây là đánh đổi phải nói rõ với giảng viên hướng dẫn ngay tuần 0, không phải tuần 10.
 
-- **1 người:** bỏ Phần VIII + khung ③ như trên còn 25-29,5 tuần-người, vẫn gấp đôi ngân sách 13. **Kết luận dứt khoát: với 1 người, phạm vi này không vừa 3 tháng bằng bất kỳ đường cắt nào.** Hai lựa chọn thật: (a) xin kéo dài thời gian đồ án, hoặc (b) thu hẹp đề tài xuống chỉ còn Phần IX + Phần XIII + một giao diện hai khung (chat + bảng nhãn), bỏ Phần VII/VIII/X/XI và dùng thư viện agent có sẵn thay Phần V/VI — khi đó còn khoảng 15-18 tuần-người, và **vẫn phải xin thêm 2-5 tuần**. Phải nói điều này với giảng viên ngay tuần 0, không phải tuần 10.
+- **1 người:** bỏ Phần VIII + khung ③ như trên còn **27,3-32,1 tuần-người**, vẫn gấp hơn hai lần ngân sách 13. **Kết luận dứt khoát: với 1 người, phạm vi này không vừa 3 tháng bằng bất kỳ đường cắt nào.** Hai lựa chọn thật: (a) xin kéo dài thời gian đồ án, hoặc (b) thu hẹp đề tài xuống chỉ còn Phần IX + Phần XIII + một giao diện hai khung (chat + bảng nhãn), bỏ Phần VII/VIII/X/XI và dùng thư viện agent có sẵn thay Phần V/VI — khi đó còn khoảng 15-18 tuần-người, và **vẫn phải xin thêm 2-5 tuần**. Phải nói điều này với giảng viên ngay tuần 0, không phải tuần 10.
 
 Điều **không** cắt trong mọi trường hợp: Phần IX (bảo mật), bộ ca T5, và **ba cấu hình C1-C3** của Phần XIII. Cắt những thứ đó là bỏ chính đóng góp của đồ án. Cấu hình **C0** là ngoại lệ duy nhất: nó chỉ là baseline "agent thường" nên nếu Gate 1 buộc phải cắt bù, C0 được rút xuống chạy trên 5 ca mẫu (xem đường cắt riêng ở cuối mục 13.3).
 
